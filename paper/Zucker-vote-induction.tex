@@ -1,0 +1,200 @@
+\def\year{2020}\relax
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article} % DO NOT CHANGE THIS
+\usepackage{aaai20}  % DO NOT CHANGE THIS
+\usepackage{times}  % DO NOT CHANGE THIS
+\usepackage{helvet} % DO NOT CHANGE THIS
+\usepackage{courier}  % DO NOT CHANGE THIS
+\usepackage[hyphens]{url}  % DO NOT CHANGE THIS
+\usepackage{graphicx} % DO NOT CHANGE THIS
+\urlstyle{rm} % DO NOT CHANGE THIS
+\def\UrlFont{\rm}  % DO NOT CHANGE THIS
+\usepackage{graphicx}  % DO NOT CHANGE THIS
+\frenchspacing  % DO NOT CHANGE THIS
+\setlength{\pdfpagewidth}{8.5in}  % DO NOT CHANGE THIS
+\setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
+%\nocopyright
+%PDF Info Is REQUIRED.
+% For /Author, add all authors within the parentheses, separated by commas. No accents or commands.
+% For /Title, add Title in Mixed Case. No accents or commands. Retain the parentheses.
+ \pdfinfo{
+/Title (Position-Based Social Choice Methods for Intransitive Incomplete Pairwise Vote Sets)
+/Author (Julian Zucker)
+} %Leave this	
+% /Title ()
+% Put your actual complete title (no codes, scripts, shortcuts, or LaTeX commands) within the parentheses in mixed case
+% Leave the space between \Title and the beginning parenthesis alone
+% /Author ()
+% Put your actual complete list of authors (no codes, scripts, shortcuts, or LaTeX commands) within the parentheses in mixed case. 
+% Each author should be only by a comma. If the name contains accents, remove them. If there are any LaTeX commands, 
+% remove them. 
+
+% DISALLOWED PACKAGES
+% \usepackage{authblk} -- This package is specifically forbidden
+% \usepackage{balance} -- This package is specifically forbidden
+% \usepackage{caption} -- This package is specifically forbidden
+% \usepackage{color (if used in text)
+% \usepackage{CJK} -- This package is specifically forbidden
+% \usepackage{float} -- This package is specifically forbidden
+% \usepackage{flushend} -- This package is specifically forbidden
+% \usepackage{fontenc} -- This package is specifically forbidden
+% \usepackage{fullpage} -- This package is specifically forbidden
+% \usepackage{geometry} -- This package is specifically forbidden
+% \usepackage{grffile} -- This package is specifically forbidden
+% \usepackage{hyperref} -- This package is specifically forbidden
+% \usepackage{navigator} -- This package is specifically forbidden
+% (or any other package that embeds links such as navigator or hyperref)
+% \indentfirst} -- This package is specifically forbidden
+% \layout} -- This package is specifically forbidden
+% \multicol} -- This package is specifically forbidden
+% \nameref} -- This package is specifically forbidden
+% \natbib} -- This package is specifically forbidden -- use the following workaround:
+% \usepackage{savetrees} -- This package is specifically forbidden
+% \usepackage{setspace} -- This package is specifically forbidden
+% \usepackage{stfloats} -- This package is specifically forbidden
+% \usepackage{tabu} -- This package is specifically forbidden
+% \usepackage{titlesec} -- This package is specifically forbidden
+% \usepackage{tocbibind} -- This package is specifically forbidden
+% \usepackage{ulem} -- This package is specifically forbidden
+% \usepackage{wrapfig} -- This package is specifically forbidden
+% DISALLOWED COMMANDS
+% \nocopyright -- Your paper will not be published if you use this command
+% \addtolength -- This command may not be used
+% \balance -- This command may not be used
+% \baselinestretch -- Your paper will not be published if you use this command
+% \clearpage -- No page breaks of any kind may be used for the final version of your paper
+% \columnsep -- This command may not be used
+% \newpage -- No page breaks of any kind may be used for the final version of your paper
+% \pagebreak -- No page breaks of any kind may be used for the final version of your paperr
+% \pagestyle -- This command may not be used
+% \tiny -- This is not an acceptable font size.
+% \vspace{- -- No negative value may be used in proximity of a caption, figure, table, section, subsection, subsubsection, or reference
+% \vskip{- -- No negative value may be used to alter spacing above or below a caption, figure, table, section, subsection, subsubsection, or reference
+
+\setcounter{secnumdepth}{0} %May be changed to 1 or 2 if section numbers are desired.
+
+% The file aaai20.sty is the style file for AAAI Press 
+% proceedings, working notes, and technical reports.
+%
+\setlength\titlebox{2.5in} % If your paper contains an overfull \vbox too high warning at the beginning of the document, use this
+% command to correct it. You may not alter the value below 2.5 in
+\title{Position-Based Social Choice Methods \\for Intransitive Incomplete Pairwise Vote Sets}
+%Your title must be in mixed case, not sentence case. 
+% That means all verbs (including short verbs like be, is, using,and go), 
+% nouns, adverbs, adjectives should be capitalized, including both words in hyphenated terms, while
+% articles, conjunctions, and prepositions are lower case unless they
+% directly follow a colon or long dash
+\author{Julian Zucker\\ % All authors must be in the same font size and format. Use \Large and \textbf to achieve this result when breaking a line
+Northeastern University, Boston, MA\\
+zucker.j@husky.neu.edu}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Combining the decisions of multiple agents into a final decision requires the use of social choice mechanisms. Pairwise decisions are often incomplete and intransitive, preventing the use of Borda count and other position-based social choice mechanisms. We propose and compare multiple methods for converting incomplete intransitive pairwise vote sets to complete rankings, enabling position-based social choice methods.  The algorithms are evaluated on their output’s Kendall's $\tau$ similarity when implementing pairwise social choice mechanisms. We show that there is only a small difference between the outputs of social choice methods on the original pairwise vote set and the generated ranking set on a real-world pairwise voting dataset.
+\end{abstract}
+
+\section{Introduction}
+When combining the preferences of multiple agents, we may ask them to specify their preferences as an ordering (a first choice, second choice, ..., $n$th choice) or as a set of pairwise preferences (choice 1 is better than choice 2, 2 worse than 3, and so on). In some cases, collecting the entire ordering for an agent is infeasible, and so we must make do with pairwise comparisons \cite{Saaty2008}. When collecting pairwise comparisons, "intransitive and incomplete preference relations can be quite reason based, hence rational" \cite{Nurmi2014}. Intransitive preferences can stem from stochastic decision-making processes or multi-objective decision making frameworks, and incomplete preferences from having limited time to vote. Running pair-based social choice mechanisms on these vote sets is simple. Pair-based social choice mechanisms (such as Ranked Pairs) operate on win/loss/tie ratios in matchups between choices, so intransitivity and incompleteness play no role in the final output. On the other hand, position-based social choice mechanisms (such as Borda count) operate on voter's orderings over all the possible choices, so using a position-based social choice mechanism on pairwise vote sets requires converting the pairwise votes into an ordering. This is simple for complete, transitive vote sets. By representing the votes as graph, where each node represents a possible choice and each edge points from the winner of a pairwise comparison to the loser, a topological sort will yield the voter's ordering. However, for intransitive incomplete pairwise vote sets (hereon "messy" vote sets), deriving an ordering is harder
+
+\section{Ordering Induction}
+This paper presents a pattern for algorithms to produce orderings from messy vote sets, called "ordering induction" algorithms. This algorithm will take a graph of one voter's messy vote set as its input, and produce a ranking over all choices based on the vote set. The algorithm proceeds in three steps:
+
+\begin{enumerate}
+\item Remove votes such that the resulting vote set is transitive.
+\item Add votes such that the resulting vote set is complete.
+\item Topologically sort the vote graph.
+\end{enumerate}
+
+This generic class of algorithm has many different implementations, using different methods for resolving intransitivity and resolving incompleteness.
+
+\subsubsection{Resolving Intransitivity}
+An intransitive set of votes produces a matchup graph containing cycles, which cannot be topologically sorted to produce a unique ordering. So, we must remove the transitive votes from our messy pairwise vote sets in order to produce a unique ordering. One trivial algorithm for resolving intransitivity is to remove every vote from the set. However, this is obviously not making good use of the information that the voter has given us. The aim is to produce the intransitive win-graph that is as close as possible to the input set. We can measure the distance between a generated vote set and the original by counting the number of edges removed. However, finding the minimum number of edges that must be removed to remove all cycles from a graph is the feedback arc set problem, a famously NP-complete problem. \cite{Karp1972}. 
+
+Instead of attempting to solve this NP-complete problem once per voter, an impossible task for votes with many possible choices, we will explore three ways to remove intransitivity. First is breaking random cycle by removing a random edge, until there are no cycles left. The second method breaks a random cycle by removing the edge that has the lowest win-ratio across the entire voting population, assuming that it's the matchup that is the most likely to be mistaken while trying to rationalize the intransitive votes. The third method is conceptually derived from the Ranked Pairs social choice method. First, order each edge by win-ratio in the overall population, and then add them in order, only adding those that will not form cycles. While is similar to the second method, it will remove the weakest edge in the set of all cycle-forming edges first, while breaking the weakest edge in each cycle provides no such guarantee.
+
+\subsubsection{Resolving Incompleteness}
+An incomplete set of votes does not have edges connecting to each node, and so produces an incomplete ordering when topologically sorted. Prior work has attempted to address this problem by asking their voters to submit more votes \cite{Conitzer2002}. However, often there is no way to get additional votes from the voters, so having methods for filling in votesets without access to the voter is useful. 
+
+We have no information on the voter's preferences between the candidates we have to generate votes for, so we must resort to approximate methods. We will look at two. The simplest method would be to fill in missing edges randomly, ensuring that no cycles form. If the graph is only missing a few edges, this can be quite viable, as much of the structure of the ordering already exists, and we would just be deciding how ties are broken. However, if much of the graph is missing, such as if only one vote was cast, this method introduces a lot of noise. Another choice is to add in missing edges in order, starting from the edge that had the highest win ratio in the entire voting set. This assumes that the voter whose vote set we are filling would have been more likely to choose that edge.  
+
+\section{Evaluating Ordering Induction}
+To evaluate ordering induction methods, we compare the output of different social choice mechanisms on the original pairwise vote set and the set of induced orderings produced by running an ordering induction method on each voter's vote set. This will not let us compare the scores for positional social choice mechanisms such as Borda count, as positional social choice mechanisms cannot be run directly on the pairwise vote set. However, if we can obtain similar results on the original dataset and the transformed one, we have at least some evidence that the preferences expressed by the orderings are similar to the preferences expressed by the original pairwise votes. We use Kendall's $\tau$ \cite{Kendall1938} to evaluate the distance between the Ranked Pairs result on the original pairwise voteset and the Ranked Pairs result on the induced ordering set.
+
+\subsubsection{Results}
+We evaluate each combination of the proposed methods for resolving intransitivity and incompleteness. However, we must first choose a dataset to evaluate these methods on. PrefLib  no datasets with voters who made both incomplete and intransitive pairwiser votes. So, we use the Northeastern Cute Dog Project's dataset \cite{DogProject}. This dataset is from an online survey which offered users the opportunity to decide which of two dogs was cuter. Around one-third of voters in this dataset submitted intransitive preferences, and almost all voters did not vote on every pair. 
+
+\renewcommand{\arraystretch}{1.2}
+\begin{table}
+\centering{
+\begin{tabular}{| l | l | l |}
+\hline Intransitivity & Incompleteness & $\tau$ ($\sigma$) 
+\\\hline Break Random & Add Random & 0.896 (0.020) 
+\\\hline Break Random & Add By Win Ratio & 0.988 (0.000) 
+\\\hline Break Weakest & Add Random & 0.917 (0.014) 
+\\\hline Break Weakest & Add By Win Ratio & 0.988 (0.000) 
+\\\hline Add In Order & Add Random & 0.936 (0.013) 
+\\\hline Add In Order & Add By Win Ratio & 0.988 (0.000) 
+\\\hline
+\end{tabular}
+\caption{Results on the Dog Project dataset for each ordering induction method, averaged over 30 runs. $\tau$ and $\sigma$ rounded to three places. 0.000 represents all runs having the same $\tau$.
+}
+}
+\end{table}
+
+Adding edges by win ratio in the overall population leads to the highest $\tau$, and always produces a ranking with the same $\tau$ regardless of what intransitivity resolver is used. This indicates that, for this dataset at least, resolving incompleteness has a larger impact than resolving intransitivity. Seeing as only a third of voters had intransitive votes, while almost all has incomplete votes, this is easy to believe.
+
+\section{Conclusion}
+We have provided a way to construct ordering induction methods from intransitivity and incompleteness resolvers. Ordering induction was shown to be robust on a real-world dataset. This is a first step in resolving intransitie and incomplete vote sets without having access to the voters to gather more preferences, and enables the use of position-based social choice mechanisms on complex, real-world problems, such as in multi-agent systems.
+
+\bibliography{vote-induction.bib}
+\bibliographystyle{aaai}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
