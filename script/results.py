@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """This file computes the values in the "Results" section of the vote induction paper."""
 import csv
 import multiprocessing
